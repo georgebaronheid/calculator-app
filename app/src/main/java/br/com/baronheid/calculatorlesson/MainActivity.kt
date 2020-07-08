@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var resultEditText: EditText
-    private val operationTextView
-            by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation_main_activity) }
+//    private val operationTextView
+//            by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation_main_activity) }
 
     //    Variáveis para guardar os operandos e tipos de cálculos
     private var operandOne: Double? = null
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             if (value.isNotEmpty()) performOperation(value, operation)
 
             pendingOperation = operation
-            operationTextView.text = pendingOperation
+            operation_main_activity.text = pendingOperation
         }
         operationButtonsArray.forEach {
             it.setOnClickListener(operationListener)
@@ -50,17 +50,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun arrayOfNumberButtons(): Array<Button> {
         return arrayOf(
-            button_0,
-            button_1,
-            button_2,
-            button_3,
-            button_4,
-            button_5,
-            button_6,
-            button_7,
-            button_8,
-            button_9,
-            button_dot
+            button_0, button_1, button_2, button_3, button_4, button_5, button_6,
+            button_7, button_8, button_9, button_dot
         )
     }
 
@@ -69,6 +60,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun performOperation(value: String, operation: String) {
-        operationTextView.text = operation
+        operation_main_activity.text = operation
     }
 }
