@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.set
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val TAG = "MainActivity"
@@ -32,22 +31,32 @@ class MainActivity : AppCompatActivity() {
             number_input_main_activity.append(buttonValue.text)
         }
 
-        val operationListener = View.OnClickListener { v ->
-            val operation = (v as Button).text.toString()
-            if (operation == "Neg") negateNumber(number_input_main_activity.text.toString())
-            else {
-                try {
-                    performOperation(
-                        number_input_main_activity.text.toString().toDouble(),
-                        operation
-                    )
-                } catch (e: NumberFormatException) {
-                    number_input_main_activity.setText("")
-                }
-                pendingOperation = operation
-                operation_main_activity.text = pendingOperation
+        button_neg.setOnClickListener { view ->
+            try {
+                negateNumber(number_input_main_activity.text.toString())
+            } catch (e: NumberFormatException) {
+                number_input_main_activity.setText("")
             }
         }
+
+        button_clear.setOnClickListener { view ->
+            clearCalculator()
+        }
+
+        val operationListener = View.OnClickListener { v ->
+            val operation = (v as Button).text.toString()
+            try {
+                performOperation(
+                    number_input_main_activity.text.toString().toDouble(),
+                    operation
+                )
+            } catch (e: NumberFormatException) {
+                number_input_main_activity.setText("")
+            }
+            pendingOperation = operation
+            operation_main_activity.text = pendingOperation
+        }
+
 
         numberButtonsArray.forEach {
             it.setOnClickListener(buttonInputListener)
@@ -56,6 +65,12 @@ class MainActivity : AppCompatActivity() {
         operationButtonsArray.forEach {
             it.setOnClickListener(operationListener)
         }
+    }
+
+    private fun clearCalculator() {
+        operandOne = null
+        operation_main_activity.text = ""
+        result_main_activity.text = null
     }
 
     private fun performOperation(value: Double, operation: String) {
@@ -78,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun negateNumber(value: String) {
-        if (value == "") number_input_main_activity.setText("-")
+        if (value.isEmpty()) number_input_main_activity.setText("-")
         else {
             number_input_main_activity.setText((value.toDouble() * -1).toString())
         }
@@ -97,8 +112,7 @@ class MainActivity : AppCompatActivity() {
             button_plus,
             button_minus,
             button_divide,
-            button_multiply,
-            button_neg
+            button_multiply
         )
     }
 
@@ -134,10 +148,11 @@ class MainActivity : AppCompatActivity() {
             "savedInstanceState.getString for pendingOperation retrieved with value $pendingOperation"
         )
 
-        result_main_activity.setText(operandOne.toString())
+        if (operandOne != null) result_main_activity.setText(operandOne.toString())
+        else result_main_activity.setText("")
+
         pendingOperation = savedInstanceState.getString(PENDING_OPERATION)!!
         operation_main_activity.text = pendingOperation
-        if (result_main_activity == null) result_main_activity.setText("")
 
         Log.d(TAG, "onRestoreInstanceState: Concluded")
     }
