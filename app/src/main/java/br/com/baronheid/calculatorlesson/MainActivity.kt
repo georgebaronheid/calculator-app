@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: Called")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setTitle("VolframBeta")
+
 
         val numberButtonsArray = arrayOfNumberButtons()
         val operationButtonsArray = arrayOfOperationButtons()
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             val buttonValue = v as Button
             number_input_main_activity.append(buttonValue.text)
         }
+
 
         button_neg.setOnClickListener { view ->
             try {
